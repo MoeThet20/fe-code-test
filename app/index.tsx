@@ -47,9 +47,7 @@ export default Home;
 
 const styles = StyleSheet.create({
     cardContainer: {
-        flex: 1,
         alignItems: 'center',
-        backgroundColor: COLORS.white,
         paddingHorizontal: 20
     },
     container: {
@@ -66,6 +64,6 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     newCardTextStyle: {
-        color: '#4AD8DA'
+        color: COLORS.cyan
     }
 });
