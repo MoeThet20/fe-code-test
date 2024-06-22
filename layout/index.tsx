@@ -27,7 +27,7 @@ export default function Layout(props: LayoutProps) {
                     <View style={styles.rightBtn}>{props.rightIcon && props.rightIcon}</View>
                 </View>
             </SafeAreaView>
-            {props.children}
+            <View style={styles.children}>{props.children}</View>
         </View>
     );
 }
@@ -57,90 +57,9 @@ const styles = StyleSheet.create({
     },
     rightBtn: {
         flex: 0.1
+    },
+    children: {
+        flex: 1,
+        backgroundColor: COLORS.white
     }
 });
-
-// import React from 'react'
-// import {
-//   TouchableOpacity,
-//   View,
-//   Text,
-//   SafeAreaView,
-//   StatusBar,
-//   Image,
-// } from 'react-native'
-// import { styles } from './styles'
-// import { COLORS, FONTS, SIZES } from 'styles'
-// import P from 'components/typography'
-
-// export default function CustomLayout({
-//   title,
-//   children,
-//   navigation,
-//   leftIcon,
-//   action
-// }) {
-//   const onPressBack = () => {
-//     if (title == 'Kitting') {
-//       navigation.navigate('Home')
-//     } else {
-//       navigation.goBack()
-//     }
-//   }
-//   return (
-//     <View style={styles.mainContainer}>
-//   <SafeAreaView style={{ backgroundColor: COLORS.primary }}>
-//     <View style={styles.header}>
-//       <StatusBar backgroundColor={COLORS.primary} />
-
-//           {leftIcon ? (
-//             leftIcon
-//           ) : (
-//             <TouchableOpacity style={styles.backButton} onPress={onPressBack}>
-//               <Image
-//                 source={require('../../assets/icons/back_arrow.png')}
-//                 style={styles.backArrow}
-//               />
-//             </TouchableOpacity>
-//           )}
-//           <View style={{ flex: 1, alignItems: "center", flexDirection: "row" }}>
-//             <View style={[styles.titleContainer]}>
-//               <Text style={styles.title}>{title}</Text>
-//             </View>
-//             <View style={{ alignItems: "flex-end", flex: 0.2 }}>
-//               {action}
-//               {/* {rightIcon ? (
-//               <>
-//                 {cartCount && cartCount > 0 ? (
-//                   <View style={styles.countIcon}>
-//                     <P
-//                       fontSize={SIZES.xs}
-//                       color={COLORS.white}
-//                       fontFamily={FONTS.semiBold}
-//                     >
-//                       {cartCount}
-//                     </P>
-//                   </View>
-//                 ) : (
-//                   <></>
-//                 )}
-
-//                 <TouchableOpacity
-//                   style={styles.cartIcon}
-//                   onPress={onPressRightIcon}
-//                 >
-//                   {rightIcon ? rightIcon : <View />}
-//                 </TouchableOpacity>
-//               </>
-//             ) : (
-//               <></>
-//             )} */}
-//             </View>
-//           </View>
-//         </View>
-//       </SafeAreaView>
-
-//       {children}
-//     </View>
-//   )
-// }

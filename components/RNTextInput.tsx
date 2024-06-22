@@ -10,7 +10,8 @@ import {
 import React from 'react';
 import RNText from './RNText';
 import { COLORS, FONTS } from 'styles';
-import { useController } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
+import { CreditCard } from 'utils';
 
 export interface TextInputProps extends RNTextInputProps {
     name: string;
@@ -22,6 +23,8 @@ export interface TextInputProps extends RNTextInputProps {
     isTextArea?: boolean;
     password?: boolean;
     rightIcon?: JSX.Element;
+    isExpirationDate?: boolean;
+    isCreditCardNumber?: boolean;
 }
 
 const RNTextInput = (props: TextInputProps) => {
@@ -39,23 +42,46 @@ const ControlledInput = (props: TextInputProps): JSX.Element => {
         containerStyle,
         errorTextStyle,
         rightIcon,
+        isExpirationDate,
+        isCreditCardNumber,
         ...inputProps
     } = props;
 
+    const formContext = useFormContext();
+    const { formState } = formContext;
+    const hasError = Boolean(formState?.errors[name]);
+
     const { field } = useController({ name, rules, defaultValue });
+
+    const handleChange = (text: string) => {
+        if (isExpirationDate) {
+            text = CreditCard.formatExpirationDate(text);
+        }
+        if (isCreditCardNumber) {
+            text = CreditCard.creditCardFormat(text);
+        }
+        field.onChange(text);
+    };
+
     return (
         <View style={styles.container}>
             {label && <RNText style={styles.label}>{label}</RNText>}
-            <TextInput
-                style={{
-                    ...styles.textInput
-                }}
-                onChangeText={field.onChange}
-                onBlur={field.onBlur}
-                value={field.value}
-                placeholderTextColor={COLORS.gray}
-                {...inputProps}
-            />
+            <View style={rightIcon && styles.textInputWrapper}>
+                <TextInput
+                    style={rightIcon ? styles.textInputRightIcon : styles.textInput}
+                    onChangeText={handleChange}
+                    onBlur={field.onBlur}
+                    value={field.value}
+                    placeholderTextColor={COLORS.gray}
+                    {...inputProps}
+                />
+                {rightIcon && rightIcon}
+            </View>
+            {hasError ? (
+                <View>
+                    <RNText style={styles.errorMessage}>{formState?.errors[name]?.message?.toString() || ''}</RNText>
+                </View>
+            ) : null}
         </View>
     );
 };
@@ -70,11 +96,30 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.regular,
         fontWeight: 'bold'
     },
-    textInput: {
-        borderWidth: 1,
+    textInputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
         borderColor: COLORS.gray,
+        borderWidth: 1,
         borderRadius: 5,
         padding: 10,
         marginTop: 5
+    },
+    textInput: {
+        fontFamily: FONTS.regular,
+        borderColor: COLORS.gray,
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 10,
+        marginTop: 5
+    },
+    textInputRightIcon: {
+        fontFamily: FONTS.regular,
+        borderColor: COLORS.gray,
+        width: '75%',
+        letterSpacing: 2
+    },
+    errorMessage: {
+        color: COLORS.red
     }
 });
