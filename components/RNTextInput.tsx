@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import RNText from './RNText';
 import { COLORS, FONTS } from 'styles';
-import { useController } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 import { CreditCard } from 'utils';
 
 export interface TextInputProps extends RNTextInputProps {
@@ -47,6 +47,10 @@ const ControlledInput = (props: TextInputProps): JSX.Element => {
         ...inputProps
     } = props;
 
+    const formContext = useFormContext();
+    const { formState } = formContext;
+    const hasError = Boolean(formState?.errors[name]);
+
     const { field } = useController({ name, rules, defaultValue });
 
     const handleChange = (text: string) => {
@@ -73,6 +77,11 @@ const ControlledInput = (props: TextInputProps): JSX.Element => {
                 />
                 {rightIcon && rightIcon}
             </View>
+            {hasError ? (
+                <View>
+                    <RNText style={styles.errorMessage}>{formState?.errors[name]?.message?.toString() || ''}</RNText>
+                </View>
+            ) : null}
         </View>
     );
 };
@@ -109,5 +118,8 @@ const styles = StyleSheet.create({
         borderColor: COLORS.gray,
         width: '75%',
         letterSpacing: 2
+    },
+    errorMessage: {
+        color: COLORS.red
     }
 });

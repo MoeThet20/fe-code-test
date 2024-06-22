@@ -8,6 +8,7 @@ import { creditCardSchema, CreditCardSchema } from 'validation/CreditCardValidat
 import { VisaCardListSvg, VisaListSvg } from 'assets/svg';
 import { COLORS, SIZES } from 'styles';
 import Layout from 'layout';
+import { FormPropertyName } from 'utils';
 
 const CARD_NUMBER_PLACEHOLDER = '0000 0000 0000 0000';
 const CARD_NAME_PLACEHOLDER = 'Ty Lee';
@@ -17,6 +18,8 @@ const EXPIRY_DATE_LENGTH = 5;
 const CVV_LENGTH = 3;
 
 const CreditCardInfo = () => {
+    const { CARD_NUMBER, CARD_NAME, CARD_EXPIRE_DATE, CARD_CVV } = FormPropertyName.CreditCardPropertyName;
+
     const methods = useForm<CreditCardSchema>({
         resolver: zodResolver(creditCardSchema),
         reValidateMode: 'onChange'
@@ -35,18 +38,18 @@ const CreditCardInfo = () => {
                     <FormProvider {...methods}>
                         <View style={styles.cardContainer}>
                             <RNTextInput
-                                name="cardNumber"
+                                name={CARD_NUMBER}
                                 label="ATM/Debit/Credit card number"
                                 isCreditCardNumber
                                 maxLength={CARD_NUMBER_LENGTH}
                                 placeholder={CARD_NUMBER_PLACEHOLDER}
                                 rightIcon={<VisaCardListSvg />}
                             />
-                            <RNTextInput name="cardName" label="Name on Card" placeholder={CARD_NAME_PLACEHOLDER} />
+                            <RNTextInput name={CARD_NAME} label="Name on Card" placeholder={CARD_NAME_PLACEHOLDER} />
                             <View style={styles.expireCvvWrapper}>
                                 <View style={styles.expireCvv}>
                                     <RNTextInput
-                                        name="expireDate"
+                                        name={CARD_EXPIRE_DATE}
                                         label="Expiry date"
                                         isExpirationDate
                                         maxLength={EXPIRY_DATE_LENGTH}
@@ -54,7 +57,7 @@ const CreditCardInfo = () => {
                                     />
                                 </View>
                                 <View style={styles.expireCvv}>
-                                    <RNTextInput name="cvv" label="CVV" maxLength={CVV_LENGTH} secureTextEntry />
+                                    <RNTextInput name={CARD_CVV} label="CVV" maxLength={CVV_LENGTH} secureTextEntry />
                                 </View>
                             </View>
                         </View>
@@ -63,7 +66,11 @@ const CreditCardInfo = () => {
                         <VisaListSvg />
                     </View>
                 </View>
-                <TouchableOpacity onPress={methods.handleSubmit(onSubmit)} style={styles.submitButton}>
+                <TouchableOpacity
+                    onPress={methods.handleSubmit(onSubmit)}
+                    style={styles.submitButton}
+                    activeOpacity={0.7}
+                >
                     <RNText style={styles.submitText}>Add Card</RNText>
                 </TouchableOpacity>
             </View>
