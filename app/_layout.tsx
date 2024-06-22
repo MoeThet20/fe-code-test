@@ -4,6 +4,10 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store } from 'redux/store';
+import { persistStore } from 'redux-persist';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,10 +27,16 @@ export default function RootLayout() {
         return null;
     }
 
+    const persistor = persistStore(store);
+
     return (
-        <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name={HOME} />
-            <Stack.Screen name={CARD_ADD} />
-        </Stack>
+        <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+                <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name={HOME} />
+                    <Stack.Screen name={CARD_ADD} />
+                </Stack>
+            </PersistGate>
+        </Provider>
     );
 }
