@@ -4,13 +4,17 @@ import React from 'react';
 import { PlusSvg, VisaCardSvg } from 'assets/svg';
 import { RNText, Card } from 'components';
 import { CARD_ADD } from 'const/routes';
-import { COLORS } from 'styles';
+import { COLORS, SIZES } from 'styles';
 import Layout from 'layout';
+import { useAppSelector } from 'hooks/ReduxHooks';
 
 const HEADER = 'Cards';
-const isCard = false;
+const ZERO = 0;
 
 const Home = () => {
+    const { creditCards } = useAppSelector((state) => state.creditCard);
+    const hasCreditCard = creditCards.length > ZERO;
+
     const rightIcon = (
         <Link href={CARD_ADD}>
             <PlusSvg />
@@ -19,7 +23,7 @@ const Home = () => {
 
     return (
         <Layout header={HEADER} rightIcon={rightIcon}>
-            {isCard ? (
+            {hasCreditCard ? (
                 <View style={styles.cardContainer}>
                     <Card />
                 </View>
@@ -29,7 +33,7 @@ const Home = () => {
                         <VisaCardSvg />
                     </View>
                     <View style={styles.innerContainer}>
-                        <RNText>No Cards Found</RNText>
+                        <RNText style={styles.noCardText}>No Cards Found</RNText>
                     </View>
                     <View style={styles.innerContainer}>
                         <RNText style={styles.middleTextStyle}>We recommend adding a card for easy payment</RNText>
@@ -60,10 +64,15 @@ const styles = StyleSheet.create({
     innerContainer: {
         marginVertical: 10
     },
+    noCardText: {
+        fontSize: SIZES.lg
+    },
     middleTextStyle: {
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: SIZES.lg
     },
     newCardTextStyle: {
-        color: COLORS.cyan
+        color: COLORS.cyan,
+        fontSize: SIZES.lg
     }
 });
