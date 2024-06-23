@@ -25,7 +25,9 @@ const Home = () => {
         <Layout header={HEADER} rightIcon={rightIcon}>
             {hasCreditCard ? (
                 <View style={styles.cardContainer}>
-                    <Card />
+                    {creditCards.map((creditCard, index) => (
+                        <Card data={creditCard} key={index} />
+                    ))}
                 </View>
             ) : (
                 <View style={styles.container}>

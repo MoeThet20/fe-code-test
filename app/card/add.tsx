@@ -1,10 +1,10 @@
 import { router } from 'expo-router';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import React from 'react';
-import { RNText, RNTextInput } from 'components';
-import { FormProvider, useForm } from 'react-hook-form';
+import React, { useState } from 'react';
+import { RNText, RNTextInput, ErrorMessage } from 'components';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { creditCardSchema, CreditCardSchema } from 'validation/CreditCardValidation';
+import { creditCardSchema } from 'validation/CreditCardValidation';
 import { VisaCardListSvg, VisaListSvg } from 'assets/svg';
 import { COLORS, SIZES } from 'styles';
 import Layout from 'layout';
@@ -21,59 +21,86 @@ const CVV_LENGTH = 3;
 const CreditCardInfo = () => {
     const { CARD_NUMBER, CARD_NAME, CARD_EXPIRE_DATE, CARD_CVV } = FormPropertyName.CreditCardPropertyName;
 
-    const methods = useForm<CreditCardSchema>({
+    const methods = useForm<CreditCardParams>({
         resolver: zodResolver(creditCardSchema),
         reValidateMode: 'onChange'
     });
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
 
     const handleGoBack = () => router.back();
 
-    const onSubmit = async (data: CreditCardParams) => await createCreditCard(data);
+    const onSubmit: SubmitHandler<CreditCardParams> = async (data) => {
+        const response = await createCreditCard(data);
+        if (!response) {
+            toggleErrorMessage();
+            return;
+        }
+        router.back();
+    };
+
+    const toggleErrorMessage = () => setShowErrorMessage((prev) => !prev);
 
     return (
-        <Layout onPress={handleGoBack}>
-            <View style={styles.container}>
-                <View style={styles.wrapper}>
-                    <FormProvider {...methods}>
-                        <View style={styles.cardContainer}>
-                            <RNTextInput
-                                name={CARD_NUMBER}
-                                label="ATM/Debit/Credit card number"
-                                isCreditCardNumber
-                                maxLength={CARD_NUMBER_LENGTH}
-                                placeholder={CARD_NUMBER_PLACEHOLDER}
-                                rightIcon={<VisaCardListSvg />}
-                            />
-                            <RNTextInput name={CARD_NAME} label="Name on Card" placeholder={CARD_NAME_PLACEHOLDER} />
-                            <View style={styles.expireCvvWrapper}>
-                                <View style={styles.expireCvv}>
-                                    <RNTextInput
-                                        name={CARD_EXPIRE_DATE}
-                                        label="Expiry date"
-                                        isExpirationDate
-                                        maxLength={EXPIRY_DATE_LENGTH}
-                                        placeholder={EXPIRY_DATE_PLACEHOLDER}
-                                    />
-                                </View>
-                                <View style={styles.expireCvv}>
-                                    <RNTextInput name={CARD_CVV} label="CVV" maxLength={CVV_LENGTH} secureTextEntry />
+        <>
+            <Layout onPress={handleGoBack}>
+                <View style={styles.container}>
+                    <View style={styles.wrapper}>
+                        <FormProvider {...methods}>
+                            <View style={styles.cardContainer}>
+                                <RNTextInput
+                                    name={CARD_NUMBER}
+                                    label="ATM/Debit/Credit card number"
+                                    isCreditCardNumber
+                                    maxLength={CARD_NUMBER_LENGTH}
+                                    placeholder={CARD_NUMBER_PLACEHOLDER}
+                                    rightIcon={<VisaCardListSvg />}
+                                    keyboardType="number-pad"
+                                />
+                                <RNTextInput
+                                    name={CARD_NAME}
+                                    label="Name on Card"
+                                    placeholder={CARD_NAME_PLACEHOLDER}
+                                />
+                                <View style={styles.expireCvvWrapper}>
+                                    <View style={styles.expireCvv}>
+                                        <RNTextInput
+                                            name={CARD_EXPIRE_DATE}
+                                            label="Expiry date"
+                                            isExpirationDate
+                                            maxLength={EXPIRY_DATE_LENGTH}
+                                            placeholder={EXPIRY_DATE_PLACEHOLDER}
+                                        />
+                                    </View>
+                                    <View style={styles.expireCvv}>
+                                        <RNTextInput
+                                            name={CARD_CVV}
+                                            label="CVV"
+                                            maxLength={CVV_LENGTH}
+                                            secureTextEntry
+                                        />
+                                    </View>
                                 </View>
                             </View>
+                        </FormProvider>
+                        <View style={styles.svgWrapper}>
+                            <VisaListSvg />
                         </View>
-                    </FormProvider>
-                    <View style={styles.svgWrapper}>
-                        <VisaListSvg />
                     </View>
+                    <TouchableOpacity
+                        onPress={methods.handleSubmit(onSubmit)}
+                        style={styles.submitButton}
+                        activeOpacity={0.7}
+                    >
+                        <RNText style={styles.submitText}>Add Card</RNText>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                    onPress={methods.handleSubmit(onSubmit)}
-                    style={styles.submitButton}
-                    activeOpacity={0.7}
-                >
-                    <RNText style={styles.submitText}>Add Card</RNText>
-                </TouchableOpacity>
-            </View>
-        </Layout>
+            </Layout>
+            <ErrorMessage
+                description="Adding card is fail. Try again!"
+                isOpen={showErrorMessage}
+                onClose={toggleErrorMessage}
+            />
+        </>
     );
 };
 

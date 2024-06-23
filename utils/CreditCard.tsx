@@ -32,8 +32,22 @@ const convertTwoDigitYearToFourDigit = (year: string): number => {
     return Number(`${Math.floor(currentYear / 100)}${yearNumber}`);
 };
 
+const removeSpaces = (str: string): string => {
+    return str.replace(/\s+/g, '');
+};
+const convertToTwoDigitMonth = (month: number): string => {
+    return month < 10 ? '0' + month : month.toString();
+};
+
+const convertToTwoDigitYear = (year: number): string => {
+    return year.toString().slice(-2);
+};
+
 export default {
     formatExpirationDate,
     creditCardFormat,
-    convertTwoDigitYearToFourDigit
+    convertTwoDigitYearToFourDigit,
+    removeSpaces,
+    convertToTwoDigitMonth,
+    convertToTwoDigitYear
 };

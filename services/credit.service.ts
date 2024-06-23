@@ -1,9 +1,9 @@
 import Omise from 'omise-react-native';
-import Config from 'react-native-config';
+import { addCreditCard } from 'redux/slices/creditCardSlice';
+import { store } from 'redux/store';
 import { CreditCard } from 'utils';
 
-// Omise.config(Config.PUBLIC_KEY, Config.SECRET_KEY, '2024-06-23');
-Omise.config('pkey_test_5wvisbxphp1zapg8ie6', 'skey_test_5wvisdjjoqmfof5npzw', '2017-11-12');
+Omise.config(process.env.EXPO_PUBLIC_KEY, process.env.EXPO_SECRET_KEY, '2024-06-23');
 
 export type CreditCardParams = {
     cardNumber: string;
@@ -16,7 +16,6 @@ const MONTH = 0;
 const YEAR = 1;
 
 export const createCreditCard = async (params: CreditCardParams) => {
-    console.log(Config.PUBLIC_KEY, Config.SECRET_KEY, Config);
     const splittedMothYear = params.expireDate.split('/');
     try {
         const request = {
@@ -30,10 +29,13 @@ export const createCreditCard = async (params: CreditCardParams) => {
                 security_code: Number(params.cvv)
             }
         };
-        console.log(request);
         const data = await Omise.createToken(request);
-        console.log(JSON.stringify(data));
+
+        if (data) {
+            store.dispatch(addCreditCard(request.card));
+            return true;
+        }
     } catch (error) {
-        console.log(error);
+        return false;
     }
 };
