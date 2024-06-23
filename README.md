@@ -1,50 +1,58 @@
-# Welcome to your Expo app 👋
+# My React Native Expo Project
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Description
+This project is a React Native application built using Expo. It includes integration with the Omise payment gateway.
 
-## Get started
+## Getting Started
 
-1. Install dependencies
+### Prerequisites
+Before you begin, ensure you have met the following requirements:
+- You have installed Node.js and npm.
+- You have installed Expo CLI.
+- You have an Omise account. If not, you can create one [here](https://omise.co/).
+
+### Installation
+
+1. Clone the repository:
+   
+   ```bash
+   git clone https://github.com/your-username/your-repo-name.git](https://github.com/MoeThet20/fe-code-test.git
+
+2. Navigate to the project directory:
+   
+   ```bash
+   cd your-repo-name
+
+3. Install the dependencies:
 
    ```bash
    npm install
-   ```
+   or
+   yarn
 
-2. Start the app
+##Setting Up Environment Variables
+
+This project uses environment variables to store sensitive information, such as the Omise public and secret keys. You need to create a .env file in the root directory of your project and add your keys.
+
+1. Create a .env file in the root directory:
 
    ```bash
-    npx expo start
-   ```
+   touch .env
 
-In the output, you'll find options to open the app in a
+2. Add your Omise keys to the .env file: 
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   EXPO_PUBLIC_KEY=your-omise-public-key
+   EXPO_SECRET_KEY=your-omise-secret-key
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Replace your-omise-public-key and your-omise-secret-key with your actual Omise public and secret keys.
 
-## Get a fresh project
 
-When you're ready, run:
+##Running the App
 
-```bash
-npm run reset-project
-```
+To start the Expo project, run:
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+   ```bash
+   npm run android or ios
+   or
+   yarn android or ios
