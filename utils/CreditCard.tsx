@@ -24,7 +24,16 @@ const creditCardFormat = (cardNumber: string) => {
     return formattedNumber;
 };
 
+const convertTwoDigitYearToFourDigit = (year: string): number => {
+    const currentYear = new Date().getFullYear();
+    const yearNumber = parseInt(year, 10);
+    const centuryCutoff = currentYear % 100;
+
+    return Number(`${Math.floor(currentYear / 100)}${yearNumber}`);
+};
+
 export default {
     formatExpirationDate,
-    creditCardFormat
+    creditCardFormat,
+    convertTwoDigitYearToFourDigit
 };

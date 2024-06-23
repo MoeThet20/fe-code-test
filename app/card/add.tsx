@@ -9,6 +9,7 @@ import { VisaCardListSvg, VisaListSvg } from 'assets/svg';
 import { COLORS, SIZES } from 'styles';
 import Layout from 'layout';
 import { FormPropertyName } from 'utils';
+import { CreditCardParams, createCreditCard } from 'services/credit.service';
 
 const CARD_NUMBER_PLACEHOLDER = '0000 0000 0000 0000';
 const CARD_NAME_PLACEHOLDER = 'Ty Lee';
@@ -27,9 +28,7 @@ const CreditCardInfo = () => {
 
     const handleGoBack = () => router.back();
 
-    const onSubmit = (data: any) => {
-        console.log(data);
-    };
+    const onSubmit = async (data: CreditCardParams) => await createCreditCard(data);
 
     return (
         <Layout onPress={handleGoBack}>
