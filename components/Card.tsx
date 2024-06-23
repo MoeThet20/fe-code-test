@@ -3,23 +3,33 @@ import React from 'react';
 import RNText from './RNText';
 import { COLORS, SIZES } from 'styles';
 import { VisaSvg } from 'assets/svg';
+import { CreditCard, Common } from 'utils';
 
 const PART_ONE = 0;
 const PART_TWO = 1;
 const FIRST_INDEX = 0;
 
-const Card = () => {
-    const number = '1234567890123456';
+type CardDataProps = {
+    name: string;
+    city: string;
+    postal_code: number;
+    number: string;
+    expiration_month: number;
+    expiration_year: number;
+    security_code: number;
+};
 
-    const transformStringToArray = (input: string): [number[], number[]] => {
-        const part1: number[] =
-            input
-                .slice(0, 12)
-                .match(/.{1,4}/g)
-                ?.map(Number) || [];
-        const part2: number[] = [Number(input.slice(12))];
-        return [part1, part2];
-    };
+type CardProps = {
+    data: CardDataProps;
+};
+
+const Card = ({ data }: CardProps) => {
+    const { transformStringToArray } = Common;
+    const { removeSpaces, convertToTwoDigitMonth, convertToTwoDigitYear } = CreditCard;
+
+    const number = removeSpaces(data.number);
+    const expireMonth = convertToTwoDigitMonth(data.expiration_month);
+    const expireYear = convertToTwoDigitYear(data.expiration_year);
 
     return (
         <View style={styles.container}>
@@ -43,11 +53,11 @@ const Card = () => {
                 <View style={styles.nameExpire}>
                     <View>
                         <RNText style={styles.textHeader}>Name on Card</RNText>
-                        <RNText style={styles.textValue}>Ty Lee</RNText>
+                        <RNText style={styles.textValue}>{data.name}</RNText>
                     </View>
                     <View>
                         <RNText style={styles.textHeader}>Expires</RNText>
-                        <RNText style={styles.textValue}>12/25</RNText>
+                        <RNText style={styles.textValue}>{`${expireMonth}/${expireYear}`}</RNText>
                     </View>
                 </View>
             </View>

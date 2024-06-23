@@ -14,10 +14,13 @@ export const creditCardSlice = createSlice({
     reducers: {
         addCreditCard: (state, actions) => {
             state.creditCards = [...state.creditCards, actions.payload];
+        },
+        removeAllCard: (state) => {
+            state.creditCards = initialState.creditCards;
         }
     }
 });
 
-export const { addCreditCard } = creditCardSlice.actions;
+export const { addCreditCard, removeAllCard } = creditCardSlice.actions;
 
 export default creditCardSlice.reducer;
