@@ -26,11 +26,14 @@ const CreditCardInfo = () => {
         reValidateMode: 'onChange'
     });
     const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleGoBack = () => router.back();
 
     const onSubmit: SubmitHandler<CreditCardParams> = async (data) => {
+        setIsLoading(true);
         const response = await createCreditCard(data);
+        setIsLoading(false);
         if (!response) {
             toggleErrorMessage();
             return;
@@ -87,11 +90,11 @@ const CreditCardInfo = () => {
                         </View>
                     </View>
                     <TouchableOpacity
-                        onPress={methods.handleSubmit(onSubmit)}
-                        style={styles.submitButton}
+                        onPress={isLoading ? () => {} : methods.handleSubmit(onSubmit)}
+                        style={[styles.submitButton, isLoading && { opacity: 0.7 }]}
                         activeOpacity={0.7}
                     >
-                        <RNText style={styles.submitText}>Add Card</RNText>
+                        <RNText style={styles.submitText}>{isLoading ? 'Loading....' : 'Add Card'}</RNText>
                     </TouchableOpacity>
                 </View>
             </Layout>
